@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 import requests
 from rest_framework.response import Response
 from decouple import config
-from api.serializers import FavoriteCharacterSerializer, FavoriteQuoteSerializer
+from api.serializers import AllFavorite, FavoriteCharacterSerializer, FavoriteQuoteSerializer
 from api_auth.models import User
 from core.settings import ONE_AUTH
 from .models import Character, FavoriteCharacter, FavoriteQuote, Quote
@@ -66,6 +66,14 @@ def add_favorite_quote(request, pk_c, pk_q):
         
         serializer = FavoriteQuoteSerializer(favorite_quote[0], many=False)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def get_favorites(request):
+  users = User.objects.all()
+  serializer = AllFavorite(users, many=True)
+  return Response(serializer.data)
 
 
 def check_or_get_character(pk_c):

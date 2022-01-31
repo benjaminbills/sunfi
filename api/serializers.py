@@ -13,11 +13,11 @@ class QuoteSerializer(serializers.ModelSerializer):
     fields = '__all__'
 
 class FavoriteCharacterSerializer(serializers.ModelSerializer):
-  user = serializers.SerializerMethodField(read_only=True)
+  # user = serializers.SerializerMethodField(read_only=True)
   character = serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = FavoriteCharacter
-    fields = '__all__'
+    fields = ['character']
   def get_user(self, obj):
     user = obj.user
     serailizer = UserSerializer(user, many=False)
@@ -31,10 +31,10 @@ class FavoriteCharacterSerializer(serializers.ModelSerializer):
 
 class FavoriteQuoteSerializer(serializers.ModelSerializer):
   quote = serializers.SerializerMethodField(read_only=True)
-  user = serializers.SerializerMethodField(read_only=True)
+  # user = serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = FavoriteQuote
-    fields = ('quote', 'user')
+    fields = ['quote']
   def get_user(self, obj):
     user = obj.user
     serailizer = UserSerializer(user, many=False)
@@ -44,3 +44,20 @@ class FavoriteQuoteSerializer(serializers.ModelSerializer):
     serailizer = QuoteSerializer(quote, many=False)
     return serailizer.data
 
+class AllFavorite(serializers.ModelSerializer):
+  id = serializers.SerializerMethodField(read_only=True)
+  quotes = serializers.SerializerMethodField(read_only=True)
+  character = serializers.SerializerMethodField(read_only=True)
+  class Meta:
+    model = User
+    fields = ['id','user_name','email','quotes', 'character']
+  def get_id(self,obj):
+    return obj.id
+  def get_quotes(self, obj):
+    quotes = FavoriteQuote.objects.filter(user=obj.id)
+    serializer = FavoriteQuoteSerializer(quotes, many=True)
+    return serializer.data
+  def get_character(self, obj):
+    quotes = FavoriteCharacter.objects.filter(user=obj.id)
+    serializer = FavoriteCharacterSerializer(quotes, many=True)
+    return serializer.data
