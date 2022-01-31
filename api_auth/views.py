@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer, UserSerializerWithToken
+from .serializers import UserSerializer, UserSerializer
 
 
 # Create your views here.
@@ -17,11 +17,11 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
   def validate(self, attrs):
       data = super().validate(attrs)
 
-      serializer = UserSerializerWithToken(self.user).data
+      serializer = UserSerializer(self.user).data
 
       for k, v in serializer.items():
         data[k] = v
-
+      # data.pop('refresh',None)
       return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -37,7 +37,7 @@ def registerUser(request):
       email = data['email'],
       password = make_password(data['password'])
     )
-    serializer = UserSerializerWithToken(user, many=False)
+    serializer = UserSerializer(user, many=False)
     
     return Response(serializer.data)
   except:
