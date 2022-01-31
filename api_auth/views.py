@@ -1,18 +1,20 @@
-from django.shortcuts import render
+# Core Django Imports
+from django.contrib.auth.hashers import make_password
+
+# Django rest framework imports
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth.hashers import make_password
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer, UserSerializer
 
-
-# Create your views here.
-
-
+# Import from project apps
+from .serializers import UserSerializer
 from .models import User
 
+# Views
+
+# Obtain token
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
   def validate(self, attrs):
       data = super().validate(attrs)
@@ -21,13 +23,13 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
       for k, v in serializer.items():
         data[k] = v
-      # data.pop('refresh',None)
+      data.pop('refresh',None)
       return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-
+# Register user
 @api_view(['POST'])
 def registerUser(request):
   data=request.data

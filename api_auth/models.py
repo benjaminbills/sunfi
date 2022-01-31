@@ -1,9 +1,10 @@
+# Core Django imports
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
+# Customise Base User Model
 class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, user_name, password, **other_fields):
@@ -33,6 +34,7 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
+# User Model
 class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), unique=True)

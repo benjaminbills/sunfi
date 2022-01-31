@@ -1,10 +1,9 @@
 from django.contrib import admin
-from .models import User
 from django.contrib.auth.admin import UserAdmin
 
-from django.db import models
+from .models import User
 
-# Register your models here.
+# Configure user admin display
 class UserAdminConfig(UserAdmin):
     model = User
     search_fields = ('email', 'user_name',)
@@ -23,4 +22,5 @@ class UserAdminConfig(UserAdmin):
          ),
     )
 
+# Register user model.
 admin.site.register(User, UserAdminConfig)
