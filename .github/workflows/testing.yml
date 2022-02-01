@@ -3,23 +3,22 @@ name: Django Tests
 on:
   push:
     branches:
-      -master
-
-    pull_request:
-      branches:
+      - master
+  
+  pull_request:
+    branches:
       - master
 
 # on:
 #   schedule:
 #     - cron:  '*/15 * * * *'
 
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
 
-    step:
+    steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -38,7 +37,6 @@ jobs:
         pip install coverage
         coverage run manage.py test
         coverage report
-    - name: Django testing
+    - name: Django Testing
       run: |
         python3 manage.py test
-
