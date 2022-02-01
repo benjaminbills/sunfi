@@ -24,26 +24,24 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="SUNFI Assessement",
-      default_version='v1',
-      description="Distributed social system",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="obafemibenjamins@gmail.com"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+    openapi.Info(
+        title="SUNFI Assessement",
+        default_version="v1",
+        description="Distributed social system",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="obafemibenjamins@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('ping', ping),
-    path('api/characters/', include('api.urls') ),
-    path('api/auth/', include('api_auth.urls') ),
-
-
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path("admin/", admin.site.urls),
+    path("ping", ping),
+    path("api/characters/", include("api.urls")),
+    path("api/auth/", include("api_auth.urls")),
+    path("", schema_view.with_ui("swagger", cache_timeout=0), name="schema-swagger-ui"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

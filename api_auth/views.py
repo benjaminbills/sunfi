@@ -1,5 +1,6 @@
 # Core Django Imports
 from django.contrib.auth.hashers import make_password
+from django.db import IntegrityError
 
 # Django rest framework imports
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -14,34 +15,37 @@ from .models import User
 
 # Views
 
+
 # Obtain token
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-  def validate(self, attrs):
-      data = super().validate(attrs)
+    def validate(self, attrs):
+        data = super().validate(attrs)
 
-      serializer = UserSerializer(self.user).data
+        serializer = UserSerializer(self.user).data
 
-      for k, v in serializer.items():
-        data[k] = v
-      data.pop('refresh',None)
-      return data
+        for k, v in serializer.items():
+            data[k] = v
+        data.pop("refresh", None)
+        return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+
 # Register user
-@api_view(['POST'])
+@api_view(["POST"])
 def registerUser(request):
-  data=request.data
-  try:
-    user = User.objects.create(
-      user_name = data['username'],
-      email = data['email'],
-      password = make_password(data['password'])
-    )
-    serializer = UserSerializer(user, many=False)
-    
-    return Response(serializer.data)
-  except:
-    message = {'detail':'User with this email or username already exist'}
-    return Response(message, status=status.HTTP_400_BAD_REQUEST)
+    data = request.data
+    try:
+        user = User.objects.create(
+            user_name=data["username"],
+            email=data["email"],
+            password=make_password(data["password"]),
+        )
+        serializer = UserSerializer(user, many=False)
+
+        return Response(serializer.data)
+    except IntegrityError:
+        message = {"detail": "User with this email or username already exist"}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
