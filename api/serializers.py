@@ -24,10 +24,10 @@ class FavoriteCharacterSerializer(serializers.ModelSerializer):
         model = FavoriteCharacter
         fields = ["character"]
 
-    def get_user(self, obj):
-        user = obj.user
-        serailizer = UserSerializer(user, many=False)
-        return serailizer.data
+    # def get_user(self, obj):
+    #     user = obj.user
+    #     serailizer = UserSerializer(user, many=False)
+    #     return serailizer.data
 
     def get_character(self, obj):
         character = obj.character
@@ -43,10 +43,10 @@ class FavoriteQuoteSerializer(serializers.ModelSerializer):
         model = FavoriteQuote
         fields = ["quote"]
 
-    def get_user(self, obj):
-        user = obj.user
-        serailizer = UserSerializer(user, many=False)
-        return serailizer.data
+    # def get_user(self, obj):
+    #     user = obj.user
+    #     serailizer = UserSerializer(user, many=False)
+    #     return serailizer.data
 
     def get_quote(self, obj):
         quote = obj.quote
