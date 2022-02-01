@@ -4,9 +4,15 @@ on:
   push:
     branches:
       -master
+
     pull_request:
       branches:
       - master
+
+# on:
+#   schedule:
+#     - cron:  '*/15 * * * *'
+
 
 jobs:
   build:
